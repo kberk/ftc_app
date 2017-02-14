@@ -13,7 +13,7 @@ public class BallPath extends RobotAutonomous {
             SLOW_POWER = 0.2,
             ACCELERATION_TIME = 2;
     private final int
-            DRIVE_DISTANCE = 100;
+            DRIVE_DISTANCE = 110;
     private final long
             START_DELAY = 20 * 1000,
             INTER_PATH_DELAY = 3 * 1000;

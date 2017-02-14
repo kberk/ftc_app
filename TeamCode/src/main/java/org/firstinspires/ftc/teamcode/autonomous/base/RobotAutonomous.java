@@ -37,8 +37,11 @@ public abstract class RobotAutonomous extends AutonomousOpMode {
     }
 
     public void turn(int factor) {
-        leftMotor.setTargetPosition(Math.round(leftMotor.getCurrentPosition() + factor));
-        rightMotor.setTargetPosition(Math.round(rightMotor.getCurrentPosition() - factor));
+        // In autonomous, left and right motors are switch
+        // negative -> turn left
+        // positive -> turn right
+        leftMotor.setTargetPosition(Math.round(leftMotor.getCurrentPosition() - factor));
+        rightMotor.setTargetPosition(Math.round(rightMotor.getCurrentPosition() + factor));
     }
 
     public void move(int factor) {

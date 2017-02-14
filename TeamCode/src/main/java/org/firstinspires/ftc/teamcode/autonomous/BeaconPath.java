@@ -45,8 +45,11 @@ public class BeaconPath extends RobotAutonomous {
 
         add(actions.move(RobotHardware.cmToPosition(70), POWER, ACCELERATION_TIME));
         add(actions.turn(getRotationDirection() * RobotHardware.angleToPosition(90), POWER, 0.5 * ACCELERATION_TIME));
+
+        telemetry.addData("Pos", getRotationDirection() * RobotHardware.angleToPosition(90));
+
         add(actions.move(RobotHardware.cmToPosition(100), POWER, ACCELERATION_TIME));
-        add(actions.turn(getRotationDirection() * -RobotHardware.angleToPosition(64), POWER, 0.5 * ACCELERATION_TIME));
+        add(actions.turn(-getRotationDirection() * RobotHardware.angleToPosition(64), POWER, 0.5 * ACCELERATION_TIME));
         add(new Action() {
             @Override
             public void run() {
@@ -57,7 +60,7 @@ public class BeaconPath extends RobotAutonomous {
         add(new LineCatcher() {
             @Override
             public boolean rotateLeft() {
-                return false;
+                return isOnLeft();
             }
         });
         add(new LineFollower() {
@@ -68,7 +71,7 @@ public class BeaconPath extends RobotAutonomous {
 
             @Override
             public boolean isLineLeft() {
-                return false;
+                return isOnLeft();
             }
         });
         add(new Action() {
@@ -104,6 +107,8 @@ public class BeaconPath extends RobotAutonomous {
                 }
             }
         });
+
+        telemetry.addData("Status", "Ready for takeoff");
     }
 
     public boolean isOnLeft() {

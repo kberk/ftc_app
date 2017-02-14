@@ -41,13 +41,14 @@ public class BeaconColorDetector {
         if (camera.imageReady()) {
             Bitmap rgbImage = CameraCommunicator.convertYuvImageToRgb(camera.yuvImage, camera.width, camera.height, ds2);
 
-            int halfWidth = (int) (camera.width * 0.5);
-            int maxWidth = (int) (camera.width - camera.width * paddingHorizontal);
-            int maxHeight = (int) (camera.height - camera.height * paddingVertical);
+            int halfWidth = (int) (rgbImage.getWidth() * 0.5);
+            int maxWidth = (int) (rgbImage.getWidth() - rgbImage.getWidth() * paddingHorizontal);
+            int maxHeight = (int) (rgbImage.getHeight() - rgbImage.getHeight() * paddingVertical);
+
 
             int leftRed = 0, leftGreen = 0, leftBlue = 0;
-            for(int x = (int) (camera.width * paddingHorizontal); x < halfWidth; x++) {
-                for(int y = (int) (camera.height * paddingVertical); y < maxHeight; y++) {
+            for(int x = (int) (rgbImage.getWidth() * paddingHorizontal); x < halfWidth; x++) {
+                for(int y = (int) (rgbImage.getHeight() * paddingVertical); y < maxHeight; y++) {
                     int pixel = rgbImage.getPixel(x, y);
                     leftRed += CameraCommunicator.red(pixel);
                     leftGreen += CameraCommunicator.green(pixel);
@@ -57,7 +58,7 @@ public class BeaconColorDetector {
 
             int rightRed = 0, rightGreen = 0, rightBlue = 0;
             for(int x = halfWidth; x < maxWidth ; x++) {
-                for (int y = (int) (camera.height * paddingVertical); y < maxHeight; y++) {
+                for (int y = (int) (rgbImage.getHeight() * paddingVertical); y < maxHeight; y++) {
                     int pixel = rgbImage.getPixel(x, y);
                     rightRed += CameraCommunicator.red(pixel);
                     rightGreen += CameraCommunicator.green(pixel);

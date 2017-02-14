@@ -31,6 +31,7 @@ public abstract class LineCatcher implements AutonomousModule {
         // Move robot's axis of rotation on line
         o.add(o.actions.move(RobotHardware.cmToPosition(RobotHardware.SENSOR_WHEEL_DISTANCE), SLOW_POWER));
 
+        o.add(o.actions.sleep(10000));
 
         // Rotate robot parallel to line
         o.add(new Action() {
