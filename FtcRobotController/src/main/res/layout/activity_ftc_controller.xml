@@ -175,6 +175,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       android:visibility="invisible"
       android:text="" />
 
+    <FrameLayout
+        android:layout_width="180dp"
+        android:layout_height="320dp"
+        android:id="@+id/previewLayout"
+        android:layout_above="@+id/textGamepad1"
+        android:layout_centerHorizontal="true">
+    </FrameLayout>
+
+
+
   </RelativeLayout>
 
   <WebView
