@@ -7,13 +7,9 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.RobotHardware;
 
-public class TriggerDriver {
+import static org.firstinspires.ftc.teamcode.RobotHardware.HALF_TURN_POWER;
 
-    private final double
-            TRIGGER_POW = 2,
-            STEERING_POW = 1,
-            TURNING_POW = 2,
-            HALF_TURN_POWER = 1;
+public class TriggerDriver {
 
     private DcMotor leftMotor, rightMotor;
     private Telemetry telemetry;
@@ -27,8 +23,8 @@ public class TriggerDriver {
     }
 
     public void init() {
-        leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -66,8 +62,8 @@ public class TriggerDriver {
                 rightMotor.setTargetPosition(rightMotor.getCurrentPosition() - pos);
             }
 
-            leftMotor.setPower(HALF_TURN_POWER);
-            rightMotor.setPower(HALF_TURN_POWER);
+            leftMotor.setPower(RobotHardware.HALF_TURN_POWER);
+            rightMotor.setPower(RobotHardware.HALF_TURN_POWER);
 
             return;
         }
@@ -76,27 +72,27 @@ public class TriggerDriver {
         if(gamepad1.a) {
 
             if(gamepad1.left_stick_x < 0) {
-                leftPower = -Math.pow( - gamepad1.left_stick_x, TURNING_POW);
-                rightPower = Math.pow( - gamepad1.left_stick_x, TURNING_POW);
+                leftPower = -Math.pow( - gamepad1.left_stick_x, RobotHardware.TURNING_POW);
+                rightPower = Math.pow( - gamepad1.left_stick_x, RobotHardware.TURNING_POW);
             } else if(gamepad1.left_stick_x > 0) {
-                leftPower = Math.pow(gamepad1.left_stick_x, TURNING_POW);
-                rightPower = -Math.pow(gamepad1.left_stick_x, TURNING_POW);
+                leftPower = Math.pow(gamepad1.left_stick_x, RobotHardware.TURNING_POW);
+                rightPower = -Math.pow(gamepad1.left_stick_x, RobotHardware.TURNING_POW);
             }
 
         } else {
 
             if (gamepad1.right_trigger > 0) {
-                leftPower = rightPower = Math.pow(gamepad1.right_trigger, TRIGGER_POW);
+                leftPower = rightPower = Math.pow(gamepad1.right_trigger, RobotHardware.TRIGGER_POW);
             } else if (gamepad1.left_trigger > 0) {
-                leftPower = rightPower = -Math.pow(gamepad1.left_trigger, TRIGGER_POW);
+                leftPower = rightPower = -Math.pow(gamepad1.left_trigger, RobotHardware.TRIGGER_POW);
             }
 
             if (gamepad1.left_stick_x < 0) {
-                leftPower *= 1 - Math.pow(-gamepad1.left_stick_x, STEERING_POW);
-                rightPower *= 1 + Math.pow(-gamepad1.left_stick_x, STEERING_POW);
+                leftPower *= 1 - Math.pow(-gamepad1.left_stick_x, RobotHardware.STEERING_POW);
+                rightPower *= 1 + Math.pow(-gamepad1.left_stick_x, RobotHardware.STEERING_POW);
             } else if (gamepad1.left_stick_x > 0) {
-                leftPower *= 1 + Math.pow(gamepad1.left_stick_x, STEERING_POW);
-                rightPower *= 1 - Math.pow(gamepad1.left_stick_x, STEERING_POW);
+                leftPower *= 1 + Math.pow(gamepad1.left_stick_x, RobotHardware.STEERING_POW);
+                rightPower *= 1 - Math.pow(gamepad1.left_stick_x, RobotHardware.STEERING_POW);
             }
 
 

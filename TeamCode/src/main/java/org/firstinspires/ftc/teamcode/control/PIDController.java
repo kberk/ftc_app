@@ -29,7 +29,8 @@ public class PIDController {
     private double
             proportion,
             integral,
-            derivative;
+            derivative,
+            power;
 
     public PIDController(DcMotor motor) {
         this.motor = motor;
@@ -63,7 +64,7 @@ public class PIDController {
 
         previousError = error;
 
-        double power = proportion + integral + derivative;
+        power = proportion + integral + derivative;
         if(power < 0) {
             power = Range.clip(power, -maxPower, -minPower);
         } else {

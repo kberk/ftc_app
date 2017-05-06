@@ -12,9 +12,27 @@ public abstract class RobotAutonomous extends AutonomousOpMode {
 
     public RobotAutonomousActions actions;
     public RobotHardware robotHardware;
-    public DcMotor leftMotor, rightMotor;
+    public DcMotor leftMotor, rightMotor, launchMotor;
     public ColorSensor colorSensor;
     public Servo beaconServo;
+
+//    boolean turning = false;
+//    boolean modePosition = false;
+//
+//    @Override
+//    public void fix() {
+//        if(rightMotor.getMode() == DcMotor.RunMode.RUN_TO_POSITION) {
+//            modePosition = true;
+//            rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        } else if(rightMotor.getMode() == DcMotor.RunMode.RUN_USING_ENCODER) {
+//            rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//            modePosition = false;
+//        }
+//
+//        if(modePosition) {
+//            rightMotor.setPower(turning ? -leftMotor.getPower() : leftMotor.getPower());
+//        }
+//    }
 
     @Override
     public void initOpMode() {
@@ -27,9 +45,13 @@ public abstract class RobotAutonomous extends AutonomousOpMode {
         rightMotor = robotHardware.getRightMotor();
         colorSensor = robotHardware.getColorSensor();
         beaconServo = robotHardware.getBeaconServo();
+        launchMotor = robotHardware.getLaunchMotor();
 
-        leftMotor.setDirection(leftMotor.getDirection() == DcMotorSimple.Direction.FORWARD ? DcMotorSimple.Direction.REVERSE : DcMotorSimple.Direction.FORWARD);
-        rightMotor.setDirection(rightMotor.getDirection() == DcMotorSimple.Direction.FORWARD ? DcMotorSimple.Direction.REVERSE : DcMotorSimple.Direction.FORWARD);
+        robotHardware.setDirection(false);
+
+        leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        beaconServo = robotHardware.getBeaconServo();
 
         setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         idle();

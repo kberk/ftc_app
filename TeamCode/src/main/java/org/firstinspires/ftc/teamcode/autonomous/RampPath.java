@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.test.RenamingDelegatingContext;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.robot.Robot;
 
 import org.firstinspires.ftc.teamcode.RobotHardware;
 import org.firstinspires.ftc.teamcode.autonomous.base.RobotAutonomous;
@@ -11,10 +12,6 @@ import org.firstinspires.ftc.teamcode.autonomous.module.BeaconColorDetector;
 @Autonomous (name = "Left | Ramp", group = "left-competition-ready")
 public class RampPath extends RobotAutonomous {
 
-    private final double
-            POWER = 0.5,
-            SLOW_POWER = 0.2,
-            ACCELERATION_TIME = 2;
     private final long
             START_DELAY = 12 * 1000;
 
@@ -31,11 +28,11 @@ public class RampPath extends RobotAutonomous {
             add(actions.sleep(START_DELAY));
         }
 
-        add(actions.move(RobotHardware.cmToPosition(70), POWER, ACCELERATION_TIME));
-        add(actions.turn(getRotationDirection() * RobotHardware.angleToPosition(90), POWER, 0.5 * ACCELERATION_TIME));
-        add(actions.move(RobotHardware.cmToPosition(100), POWER, ACCELERATION_TIME));
-        add(actions.turn(getRotationDirection() * RobotHardware.angleToPosition(45), POWER, 0.5 * ACCELERATION_TIME));
-        add(actions.move(RobotHardware.cmToPosition(50), POWER));
+        add(actions.move(RobotHardware.cmToPosition(70), RobotHardware.FAST_POWER, RobotHardware.ACCELERATION_TIME));
+        add(actions.turn(getRotationDirection() * RobotHardware.angleToPosition(90), RobotHardware.SLOW_POWER, 0.5 * RobotHardware.ACCELERATION_TIME));
+        add(actions.move(RobotHardware.cmToPosition(100), RobotHardware.FAST_POWER, RobotHardware.ACCELERATION_TIME));
+        add(actions.turn(getRotationDirection() * RobotHardware.angleToPosition(45), RobotHardware.SLOW_POWER, 0.5 * RobotHardware.ACCELERATION_TIME));
+        add(actions.move(RobotHardware.cmToPosition(50), RobotHardware.FAST_POWER));
     }
 
     public boolean isOnLeft() {

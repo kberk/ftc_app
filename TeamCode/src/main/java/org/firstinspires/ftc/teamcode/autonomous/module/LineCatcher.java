@@ -11,8 +11,8 @@ import org.firstinspires.ftc.teamcode.autonomous.base.RobotAutonomous;
 
 public abstract class LineCatcher implements AutonomousModule {
 
-    double FAST_POWER = 0.25;
-    double SLOW_POWER = 0.2;
+    double FAST_POWER = 0.15;
+    double SLOW_POWER = 0.1;
 
 
     public void insert(final AutonomousOpMode opMode) {

@@ -14,17 +14,9 @@ import org.firstinspires.ftc.teamcode.autonomous.module.BeaconColorDetector;
 import org.firstinspires.ftc.teamcode.autonomous.module.LineCatcher;
 import org.firstinspires.ftc.teamcode.autonomous.module.LineFollower;
 
-/**
- * Created by user on 27/01/17.
- */
-
 @Autonomous (name = "Left | Beacon", group = "left-competition-ready")
 public class BeaconPath extends RobotAutonomous {
 
-    private final double
-            POWER = 0.5,
-            SLOW_POWER = 0.2,
-            ACCELERATION_TIME = 2;
     private final int
             COLOR_DETECTION_ATTEMPTS = 10;
     private final long
@@ -43,18 +35,16 @@ public class BeaconPath extends RobotAutonomous {
             add(actions.sleep(START_DELAY));
         }
 
-        add(actions.move(RobotHardware.cmToPosition(70), POWER, ACCELERATION_TIME));
-        add(actions.turn(getRotationDirection() * RobotHardware.angleToPosition(90), POWER, 0.5 * ACCELERATION_TIME));
+        add(actions.move(RobotHardware.cmToPosition(70), RobotHardware.NORMAL_POWER, RobotHardware.ACCELERATION_TIME));
+        add(actions.turn(getRotationDirection() * RobotHardware.angleToPosition(90), RobotHardware.NORMAL_POWER, 0.5 * RobotHardware.ACCELERATION_TIME));
 
-        telemetry.addData("Pos", getRotationDirection() * RobotHardware.angleToPosition(90));
-
-        add(actions.move(RobotHardware.cmToPosition(100), POWER, ACCELERATION_TIME));
-        add(actions.turn(-getRotationDirection() * RobotHardware.angleToPosition(64), POWER, 0.5 * ACCELERATION_TIME));
+        add(actions.move(RobotHardware.cmToPosition(100), RobotHardware.NORMAL_POWER, RobotHardware.ACCELERATION_TIME));
+        add(actions.turn(-getRotationDirection() * RobotHardware.angleToPosition(64), RobotHardware.NORMAL_POWER, 0.5 * RobotHardware.ACCELERATION_TIME));
         add(new Action() {
             @Override
             public void run() {
                 setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                setPower(POWER);
+                setPower(RobotHardware.NORMAL_POWER);
             }
         });
         add(new LineCatcher() {
@@ -78,7 +68,7 @@ public class BeaconPath extends RobotAutonomous {
             @Override
             public void start() {
                 setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                setPower(SLOW_POWER);
+                setPower(RobotHardware.SLOW_POWER);
             }
 
             int red = 0, blue = 0;

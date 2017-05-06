@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.robot.Robot;
 
 public class RobotHardware {
 
@@ -27,27 +26,66 @@ public class RobotHardware {
     * circumference = 1120 * 298.78 / 14168
 	*/
 
+	/* Driver */
+    public static final double
+            TRIGGER_POW = 2,
+            STEERING_POW = 1,
+            TURNING_POW = 2,
+            HALF_TURN_POWER = 1;
 
-    public static final int ONE_ROTATION = 1120;
+    /* Motion */
+    public static final double
+            PICKUP_MAX_POWER = 0.3,
+            PICKUP_POW = 2,
+            SERVO_MIN_POS = 0,
+            SERVO_MAX_POS = 1;
 
+    /* Launch */
+    public static final int
+            LAUNCH_T0 = 0,
+            LAUNCH_T1 = (int) Math.round(0.3 * RobotHardware.ONE_ROTATION_60),
+            LAUNCH_T2 = (int) Math.round(0.5 * RobotHardware.ONE_ROTATION_60),
+            LAUNCH_ONE_ROTATION = RobotHardware.ONE_ROTATION_60;
+    public static final double
+            LAUNCH_SLOW_POWER = 0.15,
+            LAUNCH_FAST_POWER = 0.7;
+
+    /* Encoder */
+    public static final int
+            ONE_ROTATION_40 = 1120,
+            ONE_ROTATION_60 = 1680;
+
+    /* General */
     public static final double
             WHEEL_CIRCUMFERENCE = 1120 * 298.78 / 14168,
             WHEEL_DISTANCE = 39.6,
-            SENSOR_WHEEL_DISTANCE = 21;
+            SENSOR_WHEEL_DISTANCE = 14;
+
+    /* Autonomous */
+    public static final double
+            SLOW_POWER = 0.1,
+            NORMAL_POWER = 0.25,
+            FAST_POWER = 0.4,
+            ACCELERATION_TIME = 0;
 
     private HardwareMap hardwareMap;
     public RobotHardware(HardwareMap hardwareMap) {
         this.hardwareMap = hardwareMap;
     }
 
-    public void init() {
+    public void init()  {
         ModernRoboticsUsbDcMotorController wheelMotorController = (ModernRoboticsUsbDcMotorController) getWheelMotorController();
         wheelMotorController.setGearRatio(1, 1d/40d);
         wheelMotorController.setGearRatio(2, 1d/40d);
 
-        setDirection(true);
+        ModernRoboticsUsbDcMotorController secondaryMotorController = (ModernRoboticsUsbDcMotorController) getSecondaryMotorController();
+        secondaryMotorController.setGearRatio(1, 1d/40d);
+        secondaryMotorController.setGearRatio(2, 1d/60d);
 
-        getLaunchMotor().setDirection(DcMotorSimple.Direction.REVERSE);
+
+        getLaunchMotor().setDirection(DcMotorSimple.Direction.FORWARD);
+
+        setDirection(true);
     }
 
     public void setDirection(boolean pickupFront) {
@@ -62,6 +100,10 @@ public class RobotHardware {
 
     public DcMotorController getWheelMotorController() {
         return hardwareMap.dcMotorController.get("wheel_motor_controller");
+    }
+
+    public DcMotorController getSecondaryMotorController() {
+        return hardwareMap.dcMotorController.get("secondary_motor_controller");
     }
 
     public DcMotor getLeftMotor() {
@@ -86,7 +128,7 @@ public class RobotHardware {
 
 
     public static int cmToPosition(double cm) {
-        return (int) Math.round ((cm / RobotHardware.WHEEL_CIRCUMFERENCE) * RobotHardware.ONE_ROTATION);
+        return (int) Math.round ((cm / RobotHardware.WHEEL_CIRCUMFERENCE) * RobotHardware.ONE_ROTATION_40);
     }
 
     public static int angleToPosition(double angle) {

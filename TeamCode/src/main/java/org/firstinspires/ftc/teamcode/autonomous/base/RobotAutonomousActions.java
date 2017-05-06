@@ -6,6 +6,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.robot.Robot;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.RobotHardware;
+import org.firstinspires.ftc.teamcode.control.PIDController;
+
 public class RobotAutonomousActions {
 
     private RobotAutonomous r;
@@ -14,11 +17,11 @@ public class RobotAutonomousActions {
     }
 
     public Action move(final int factor, final double power, final double accelerationTime) {
-        return new AccelerateAction(power, accelerationTime) {
+        return new AccelerateAction(power, 0) {
             @Override
             public void start() {
                 super.start();
-                r.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                r.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 r.setPower(targetPower);
                 r.move(factor);
             }
@@ -26,12 +29,11 @@ public class RobotAutonomousActions {
             @Override
             public void run() {
                 super.run();
-                r.setPower(targetPower);
             }
 
             @Override
             public boolean hasEnded() {
-                return r.areMotorsAtRest();
+                return r.leftMotor.getCurrentPosition() >= r.leftMotor.getTargetPosition();
             }
 
             @Override
@@ -46,24 +48,32 @@ public class RobotAutonomousActions {
     }
 
     public Action turn(final int factor, final double power, final double accelerationTime) {
-        return new AccelerateAction(power, accelerationTime) {
+        return new AccelerateAction(power, 0) {
             @Override
             public void start() {
                 super.start();
-                r.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                r.setPower(targetPower);
+                r.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                if(factor > 0) {
+                    r.leftMotor.setPower(-power);
+                    r.rightMotor.setPower(power);
+                } else {
+                    r.leftMotor.setPower(power);
+                    r.rightMotor.setPower(-power);
+                }
                 r.turn(factor);
             }
 
             @Override
             public void run() {
-                super.run();
-                r.setPower(targetPower);
             }
 
             @Override
             public boolean hasEnded() {
-                return r.areMotorsAtRest();
+                if(r.leftMotor.getPower() > 0) {
+                    return r.leftMotor.getCurrentPosition() >= r.leftMotor.getTargetPosition();
+                } else {
+                    return r.leftMotor.getCurrentPosition() <= r.leftMotor.getTargetPosition();
+                }
             }
 
             @Override
@@ -78,6 +88,7 @@ public class RobotAutonomousActions {
     }
 
     private class AccelerateAction extends Action {
+        PIDController pid;
         double power, targetPower, accelerateTime, acceleration;
         long startTime;
         AccelerateAction(double power, double accelerationTime) {
@@ -119,6 +130,32 @@ public class RobotAutonomousActions {
             @Override
             public void run() {
                 idle();
+            }
+        };
+    }
+
+    public Action shoot() {
+        return new Action() {
+            int launchMotorStartPosition;
+            @Override
+            public void start() {
+                launchMotorStartPosition = r.launchMotor.getCurrentPosition();
+                r.launchMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                r.launchMotor.setPower(RobotHardware.LAUNCH_SLOW_POWER);
+            }
+
+            @Override
+            public boolean hasEnded() {
+                int launchRelMotorPos = r.launchMotor.getCurrentPosition() - launchMotorStartPosition;
+                return launchRelMotorPos >= RobotHardware.LAUNCH_T1 && launchRelMotorPos <= RobotHardware.LAUNCH_T2;
+            }
+
+            @Override
+            public void stop() {
+                r.launchMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                r.launchMotor.setPower(RobotHardware.LAUNCH_FAST_POWER);
+                r.launchMotor.setTargetPosition(launchMotorStartPosition + RobotHardware.LAUNCH_ONE_ROTATION + RobotHardware.LAUNCH_T0);
+                sleep(500);
             }
         };
     }

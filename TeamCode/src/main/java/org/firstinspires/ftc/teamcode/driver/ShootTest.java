@@ -1,24 +1,19 @@
 package org.firstinspires.ftc.teamcode.driver;
 
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsUsbDcMotorController;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.DifferentialControlLoopCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.RobotHardware;
 
-@TeleOp(name = "DriverBot")
-public class DriverBot extends OpMode {
+@TeleOp(name = "ShootTest")
+public class ShootTest extends OpMode {
 
     private ElapsedTime runtime;
     private DcMotor leftMotor, rightMotor, pickupMotor, launchMotor;
     private Servo beaconServo;
-
-    private ModernRoboticsUsbDcMotorController wheelMotorController;
 
     private TriggerDriver driver;
     private MotionController motionController;
@@ -36,8 +31,6 @@ public class DriverBot extends OpMode {
         launchMotor = robotHardware.getLaunchMotor();
         beaconServo = robotHardware.getBeaconServo();
 
-        wheelMotorController = (ModernRoboticsUsbDcMotorController) robotHardware.getWheelMotorController();
-
         driver = new TriggerDriver(leftMotor, rightMotor, telemetry);
         driver.init();
 
@@ -51,11 +44,21 @@ public class DriverBot extends OpMode {
         motionController.start();
         runtime.reset();
     }
+
+    boolean done;
+
     @Override
     public void loop() {
+        if(!done) {
+            gamepad2.a = true;
+            motionController.control(gamepad1, gamepad2);
+            gamepad2.a = false;
+            done=true;
+            return;
+        }
+
         telemetry.addData("Status", "Running for " + runtime.toString());
         driver.drive(gamepad1, gamepad2);
-        motionController.control(gamepad1, gamepad2);
 
         telemetry.addData("LaunchStartPos", motionController.launchMotorStartPosition);
         telemetry.addData("LeftPos", leftMotor.getCurrentPosition());
@@ -63,11 +66,6 @@ public class DriverBot extends OpMode {
 
         telemetry.addData("Launch motor", launchMotor.getCurrentPosition());
         telemetry.addData("Launch pos", launchMotor.isBusy());
-
-        DifferentialControlLoopCoefficients left = wheelMotorController.getDifferentialControlLoopCoefficients(leftMotor.getPortNumber());
-        DifferentialControlLoopCoefficients right = wheelMotorController.getDifferentialControlLoopCoefficients(rightMotor.getPortNumber());
-        telemetry.addData("LeftPID",  "P: " + left.p + " I:" + left.i + " D: " + left.d);
-        telemetry.addData("LeftPID",  "P: " + right.p + " I:" + right.i + " D: " + right.d);
     }
 
     @Override

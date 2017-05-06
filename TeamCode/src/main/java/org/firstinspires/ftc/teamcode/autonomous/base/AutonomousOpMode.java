@@ -15,6 +15,7 @@ public abstract class AutonomousOpMode extends LinearOpMode {
 
     public abstract void initOpMode();
 
+
     @Override
     public void runOpMode() throws InterruptedException {
         initOpMode();

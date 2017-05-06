@@ -12,8 +12,8 @@ import org.firstinspires.ftc.teamcode.control.DoubleMotorPID;
 import org.firstinspires.ftc.teamcode.control.PIDController;
 import org.firstinspires.ftc.teamcode.input.GamepadListener;
 
-@TeleOp(name = "PIDTester", group = "test")
-public class PIDTester extends LinearOpMode {
+@TeleOp(name = "PIDTesterLaunch", group = "test")
+public class PIDTesterLaunch extends LinearOpMode {
 
     int mode;
 
@@ -21,8 +21,8 @@ public class PIDTester extends LinearOpMode {
 
     RobotHardware hardware;
 
-    DcMotor leftMotor, rightMotor;
-    DoubleMotorPID pidController;
+    DcMotor launchMotor;
+    PIDController pidController;
     ModernRoboticsUsbDcMotorController dcMotorController;
 
     double
@@ -42,16 +42,19 @@ public class PIDTester extends LinearOpMode {
 
     GamepadListener gamepadListener;
 
-    @Override
     public void runOpMode() throws InterruptedException {
         hardware = new RobotHardware(hardwareMap);
-        leftMotor = hardware.getLeftMotor();
-        rightMotor = hardware.getRightMotor();
-        dcMotorController = (ModernRoboticsUsbDcMotorController) hardware.getWheelMotorController();
+        launchMotor = hardware.getLaunchMotor();
+        dcMotorController = (ModernRoboticsUsbDcMotorController) hardware.getSecondaryMotorController();
 
-        pidController = new DoubleMotorPID(leftMotor, rightMotor);
-        pidController.setPIDValues(kp, kd, kp);
-        pidController.setMaxPower(maxPower);
+        launchMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        pidController = new PIDController(launchMotor);
+        pidController.kp = kp;
+        pidController.ki = ki;
+        pidController.kd = kd;
+
+        pidController.maxPower = maxPower;
 
         gamepadListener = new GamepadListener(gamepad1);
         gamepadListener.registerListener(new GamepadListener.InputListener() {
@@ -109,41 +112,34 @@ public class PIDTester extends LinearOpMode {
             }
 
             if(gamepad1.left_stick_button) {
-                leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                launchMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 mode = 0;
             } else if(gamepad1.right_stick_button) {
-                leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                launchMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 mode = 1;
             }
 
-            pidController.setPIDValues(kp, kd, kp);
+            pidController.kp = kp;
+            pidController.ki = ki;
+            pidController.kd = kd;
             dcMotorController.setDifferentialControlLoopCoefficients(1, new DifferentialControlLoopCoefficients(kp, ki, kd));
             dcMotorController.setDifferentialControlLoopCoefficients(2, new DifferentialControlLoopCoefficients(kp, ki, kd));
 
             if(gamepad1.right_trigger > 0) {
                 pidController.reset();
-                leftMotor.setTargetPosition(leftMotor.getCurrentPosition() + RobotHardware.cmToPosition(100));
-                rightMotor.setTargetPosition(rightMotor.getCurrentPosition() + RobotHardware.cmToPosition(100));
+                launchMotor.setTargetPosition(launchMotor.getCurrentPosition() + RobotHardware.ONE_ROTATION_60);
             }
             if(gamepad1.left_trigger > 0) {
-                DcMotor.RunMode runModeLeft = leftMotor.getMode();
-                DcMotor.RunMode runModeRight = rightMotor.getMode();
-                leftMotor.setPower(0);
-                rightMotor.setPower(0);
-                leftMotor.setTargetPosition(0);
-                rightMotor.setTargetPosition(0);
-                leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                DcMotor.RunMode runModeLeft = launchMotor.getMode();
+                launchMotor.setPower(0);
+                launchMotor.setTargetPosition(0);
+                launchMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 idle();
-                leftMotor.setMode(runModeLeft);
-                rightMotor.setMode(runModeRight);
+                launchMotor.setMode(runModeLeft);
             }
 
             if(mode == 0) {
-                leftMotor.setPower(maxPower);
-                rightMotor.setPower(maxPower);
+                launchMotor.setPower(maxPower);
             }
             if(mode == 1) {
                 pidController.control(deltaTime);
@@ -151,7 +147,7 @@ public class PIDTester extends LinearOpMode {
 
 
             telemetry.addData("finishCustom", pidController.isAtDestination());
-            telemetry.addData("finishDefault", !leftMotor.isBusy() && !rightMotor.isBusy());
+            telemetry.addData("finishDefault", !launchMotor.isBusy());
 
             idle();
             telemetry.update();
