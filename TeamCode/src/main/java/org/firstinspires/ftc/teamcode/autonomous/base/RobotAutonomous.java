@@ -56,6 +56,10 @@ public abstract class RobotAutonomous extends AutonomousOpMode {
         setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         idle();
         setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        if (isStartDelayed()) {
+            add(actions.sleep(getStartDelay()));
+        }
     }
 
     public void turn(int factor) {
@@ -80,6 +84,30 @@ public abstract class RobotAutonomous extends AutonomousOpMode {
         leftMotor.setMode(mode);
         rightMotor.setMode(mode);
     }
+
+    /* Most likely overridden */
+
+    public int getStartDelay() {
+        return 0;
+    }
+
+    public boolean isStartDelayed() {
+        return false;
+    }
+
+    public double getTileOffset() {
+        return 0;
+    }
+
+    public boolean isOnLeft() {
+        return true;
+    }
+
+    public int getRotationDirection() {
+        return isOnLeft() ? -1 : 1;
+    }
+
+    /* */
 
     public boolean areMotorsAtRest() {
         return !leftMotor.isBusy() && !rightMotor.isBusy();

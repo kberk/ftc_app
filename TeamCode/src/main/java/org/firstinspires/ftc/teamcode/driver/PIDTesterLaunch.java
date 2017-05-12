@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.driver;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsUsbDcMotorController;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -13,6 +14,7 @@ import org.firstinspires.ftc.teamcode.control.PIDController;
 import org.firstinspires.ftc.teamcode.input.GamepadListener;
 
 @TeleOp(name = "PIDTesterLaunch", group = "test")
+@Disabled
 public class PIDTesterLaunch extends LinearOpMode {
 
     int mode;

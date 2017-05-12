@@ -37,35 +37,37 @@ public class TriggerDriver {
     public void drive(Gamepad gamepad1, Gamepad gamepad2) {
         double leftPower = 0, rightPower = 0;
 
-        if(halfTurning) {
-            if(!leftMotor.isBusy() && !rightMotor.isBusy()) {
-                halfTurning = false;
-                leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            } else {
+        if(RobotHardware.ENABLE_QUICKTURN) {
+            if (halfTurning) {
+                if (!leftMotor.isBusy() && !rightMotor.isBusy()) {
+                    halfTurning = false;
+                    leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                } else {
+                    return;
+                }
+            } else if (gamepad1.x || gamepad1.b) {
+                halfTurning = true;
+
+                leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                int pos = RobotHardware.angleToPosition(180);
+                if (gamepad1.x) {
+                    // To the left
+                    leftMotor.setTargetPosition(leftMotor.getCurrentPosition() - pos);
+                    rightMotor.setTargetPosition(rightMotor.getCurrentPosition() + pos);
+                } else {
+                    // To the right
+                    leftMotor.setTargetPosition(leftMotor.getCurrentPosition() + pos);
+                    rightMotor.setTargetPosition(rightMotor.getCurrentPosition() - pos);
+                }
+
+                leftMotor.setPower(RobotHardware.HALF_TURN_POWER);
+                rightMotor.setPower(RobotHardware.HALF_TURN_POWER);
+
                 return;
             }
-        } else if (gamepad1.x || gamepad1.b) {
-            halfTurning = true;
-
-            leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            int pos = RobotHardware.angleToPosition(180);
-            if(gamepad1.x) {
-                // To the left
-                leftMotor.setTargetPosition(leftMotor.getCurrentPosition() - pos);
-                rightMotor.setTargetPosition(rightMotor.getCurrentPosition() + pos);
-            } else {
-                // To the right
-                leftMotor.setTargetPosition(leftMotor.getCurrentPosition() + pos);
-                rightMotor.setTargetPosition(rightMotor.getCurrentPosition() - pos);
-            }
-
-            leftMotor.setPower(RobotHardware.HALF_TURN_POWER);
-            rightMotor.setPower(RobotHardware.HALF_TURN_POWER);
-
-            return;
         }
 
 

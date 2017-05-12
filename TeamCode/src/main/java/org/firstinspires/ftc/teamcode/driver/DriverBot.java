@@ -57,10 +57,10 @@ public class DriverBot extends OpMode {
         driver.drive(gamepad1, gamepad2);
         motionController.control(gamepad1, gamepad2);
 
-        telemetry.addData("LaunchStartPos", motionController.launchMotorStartPosition);
         telemetry.addData("LeftPos", leftMotor.getCurrentPosition());
         telemetry.addData("RightPos", rightMotor.getCurrentPosition());
 
+        telemetry.addData("LaunchStartPos", motionController.launchMotorStartPosition);
         telemetry.addData("Launch motor", launchMotor.getCurrentPosition());
         telemetry.addData("Launch pos", launchMotor.isBusy());
 

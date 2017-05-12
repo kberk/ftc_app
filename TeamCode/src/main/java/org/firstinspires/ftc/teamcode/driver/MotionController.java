@@ -19,7 +19,7 @@ public class MotionController {
 
     RobotHardware hardware;
 
-    public MotionController (DcMotor pickupMotor, DcMotor launchMotor, Servo beaconServo) {
+    public MotionController(DcMotor pickupMotor, DcMotor launchMotor, Servo beaconServo) {
         this.pickupMotor = pickupMotor;
         this.launchMotor = launchMotor;
         this.beaconServo = beaconServo;
@@ -38,43 +38,45 @@ public class MotionController {
 
     public void control(Gamepad gamepad1, Gamepad gamepad2) {
 
-        if(gamepad2.a && launchPhase == 0) {
+        if ((gamepad2.a || (RobotHardware.ENABLE_SHOOTING_GAMEPAD_1 && gamepad1.y)) && launchPhase == 0) {
             launchPhase = 1;
             launchAmount++;
 
             launchMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             launchMotor.setPower(RobotHardware.LAUNCH_SLOW_POWER);
         }
-        if(launchPhase == 1) {
+        if (launchPhase == 1) {
             int launchRelMotorPos = launchMotor.getCurrentPosition() - RobotHardware.LAUNCH_ONE_ROTATION * (launchAmount - 1) - launchMotorStartPosition;
-            if(launchRelMotorPos >= RobotHardware.LAUNCH_T1 && launchRelMotorPos <= RobotHardware.LAUNCH_T2) {
-                    launchMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    launchMotor.setPower(RobotHardware.LAUNCH_FAST_POWER);
-                    launchMotor.setTargetPosition(launchMotorStartPosition + RobotHardware.LAUNCH_ONE_ROTATION * launchAmount + RobotHardware.LAUNCH_T0);
-                    launchPhase = 2;
+            if (launchRelMotorPos >= RobotHardware.LAUNCH_T1 && launchRelMotorPos <= RobotHardware.LAUNCH_T2) {
+                launchMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                launchMotor.setPower(RobotHardware.LAUNCH_FAST_POWER);
+                launchMotor.setTargetPosition(launchMotorStartPosition + RobotHardware.LAUNCH_ONE_ROTATION * launchAmount + RobotHardware.LAUNCH_T0);
+                launchPhase = 2;
             }
         }
-        if(launchPhase == 2 && !launchMotor.isBusy()) {
+        if (launchPhase == 2 && !launchMotor.isBusy()) {
             launchPhase = 0;
-            if(launchMotor.getTargetPosition() == launchMotor.getCurrentPosition()) {
+            if (launchMotor.getTargetPosition() == launchMotor.getCurrentPosition()) {
                 launchMotor.setPower(0);
             }
         }
 
-        if(gamepad1.right_bumper) {
+        if (gamepad1.right_bumper) {
             pickupMotor.setPower(RobotHardware.PICKUP_MAX_POWER);
-        } else if (gamepad1.left_bumper){
+        } else if (gamepad1.left_bumper) {
             pickupMotor.setPower(-
                     RobotHardware.PICKUP_MAX_POWER);
-        } else if(gamepad2.right_trigger > 0) {
-            pickupMotor.setPower(Math.pow(gamepad2.right_trigger, RobotHardware.PICKUP_POW) * RobotHardware.PICKUP_MAX_POWER);
-        } else {
-            pickupMotor.setPower(-Math.pow(gamepad2.left_trigger, RobotHardware.PICKUP_POW) * RobotHardware.PICKUP_MAX_POWER);
+        } else if (RobotHardware.ENABLE_PICKUP_GAMEPAD1) {
+            if (gamepad2.right_trigger > 0) {
+                pickupMotor.setPower(Math.pow(gamepad2.right_trigger, RobotHardware.PICKUP_POW) * RobotHardware.PICKUP_MAX_POWER);
+            } else {
+                pickupMotor.setPower(-Math.pow(gamepad2.left_trigger, RobotHardware.PICKUP_POW) * RobotHardware.PICKUP_MAX_POWER);
+            }
         }
 
-        if(gamepad2.dpad_left) {
+        if (gamepad2.dpad_left || (RobotHardware.ENABLE_SERVO_GAMEPAD1 && gamepad1.dpad_left)) {
             beaconServo.setPosition(RobotHardware.SERVO_MIN_POS);
-        } else if(gamepad2.dpad_right) {
+        } else if (gamepad2.dpad_right || (RobotHardware.ENABLE_SERVO_GAMEPAD1 && gamepad1.dpad_right)) {
             beaconServo.setPosition(RobotHardware.SERVO_MAX_POS);
         }
 

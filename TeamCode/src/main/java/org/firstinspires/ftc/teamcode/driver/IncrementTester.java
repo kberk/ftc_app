@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.driver;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.teamcode.input.GamepadListener;
  */
 
 @TeleOp(name = "Increment")
+@Disabled
 public class IncrementTester extends LinearOpMode {
 
 

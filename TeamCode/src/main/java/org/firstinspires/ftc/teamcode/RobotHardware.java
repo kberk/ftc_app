@@ -26,6 +26,8 @@ public class RobotHardware {
     * circumference = 1120 * 298.78 / 14168
 	*/
 
+    // AUTONOMOUS base position is the exact middle of the field
+
 	/* Driver */
     public static final double
             TRIGGER_POW = 2,
@@ -55,18 +57,32 @@ public class RobotHardware {
             ONE_ROTATION_40 = 1120,
             ONE_ROTATION_60 = 1680;
 
-    /* General */
+    /* Construction */
     public static final double
             WHEEL_CIRCUMFERENCE = 1120 * 298.78 / 14168,
             WHEEL_DISTANCE = 39.6,
-            SENSOR_WHEEL_DISTANCE = 14;
+            SENSOR_WHEEL_DISTANCE = 14,
+            AXIS_BACK_DISTANCE  = 10;
 
     /* Autonomous */
     public static final double
-            SLOW_POWER = 0.1,
+            VERY_SLOW_POWER = 0.1,
+            SLOW_POWER = 0.18,
             NORMAL_POWER = 0.25,
             FAST_POWER = 0.4,
             ACCELERATION_TIME = 0;
+
+    /* Field */
+    public static final double
+            FIELD_WIDTH_CM = 358.14001,
+            TILE_WIDTH_CM = 59.69;
+
+    /* Features */
+    public static final boolean
+            ENABLE_QUICKTURN = false,
+            ENABLE_PICKUP_GAMEPAD1 = true,
+            ENABLE_SHOOTING_GAMEPAD_1 = true,
+            ENABLE_SERVO_GAMEPAD1 = true;
 
     private HardwareMap hardwareMap;
     public RobotHardware(HardwareMap hardwareMap) {
