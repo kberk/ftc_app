@@ -45,7 +45,7 @@ public class RampPath extends RobotAutonomous {
         }
     }
 
-    @Autonomous (name = "Left | Ramp | 0t | 0s", group = "left-competition-ready")
+    @Autonomous (name = "Left | Ramp | 0t | 12s", group = "left-competition-ready")
     public static class RampPathDelay extends RampPath {
         @Override
         public boolean isStartDelayed() {
@@ -79,7 +79,7 @@ public class RampPath extends RobotAutonomous {
         }
     }
 
-    @Autonomous (name = "Left | Ramp | 1t | 0s", group = "left-competition-ready")
+    @Autonomous (name = "Left | Ramp | 1t | 12s", group = "left-competition-ready")
     public static class RampPath1TDelay extends RampPathDelay {
         @Override
         public double getTileOffset() {
@@ -111,7 +111,7 @@ public class RampPath extends RobotAutonomous {
         }
     }
 
-    @Autonomous (name = "Left | Ramp | -.5t | 0s", group = "left-competition-ready")
+    @Autonomous (name = "Left | Ramp | -.5t | 12s", group = "left-competition-ready")
     public static class RampPathMD5TDelay extends RampPathDelay {
         @Override
         public double getTileOffset() {

@@ -26,6 +26,10 @@ public abstract class LineCatcher implements AutonomousModule {
                 return o.isOnLine();
             }
 
+//            @Override
+//            public void stop() {
+//                o.setPower(0);
+//            }
         });
 
         // Move robot's axis of rotation on line

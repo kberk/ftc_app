@@ -33,7 +33,7 @@ public class RobotAutonomousActions {
 
             @Override
             public boolean hasEnded() {
-                return r.leftMotor.getCurrentPosition() >= r.leftMotor.getTargetPosition();
+                return r.areMotorsAtRest();
             }
 
             @Override
@@ -69,11 +69,7 @@ public class RobotAutonomousActions {
 
             @Override
             public boolean hasEnded() {
-                if(r.leftMotor.getPower() > 0) {
-                    return r.leftMotor.getCurrentPosition() >= r.leftMotor.getTargetPosition();
-                } else {
-                    return r.leftMotor.getCurrentPosition() <= r.leftMotor.getTargetPosition();
-                }
+                return r.areMotorsAtRest();
             }
 
             @Override
