@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.robot.Robot;
 
 public class RobotHardware {
 
@@ -37,7 +38,7 @@ public class RobotHardware {
 
     /* Motion */
     public static final double
-            PICKUP_MAX_POWER = 0.3,
+            PICKUP_MAX_POWER = 0.8,
             PICKUP_POW = 2,
             SERVO_MIN_POS = 0,
             SERVO_MAX_POS = 1;
@@ -61,7 +62,7 @@ public class RobotHardware {
     public static final double
             WHEEL_CIRCUMFERENCE = 1120 * 298.78 / 14168,
             WHEEL_DISTANCE = 39.6,
-            SENSOR_WHEEL_DISTANCE = 14,
+            SENSOR_WHEEL_DISTANCE = 18,
             AXIS_BACK_DISTANCE  = 10;
 
     /* Autonomous */
@@ -145,6 +146,10 @@ public class RobotHardware {
 
     public static int cmToPosition(double cm) {
         return (int) Math.round ((cm / RobotHardware.WHEEL_CIRCUMFERENCE) * RobotHardware.ONE_ROTATION_40);
+    }
+
+    public static double positionToCm(int pos) {
+        return (pos / ((double) RobotHardware.ONE_ROTATION_40)) * RobotHardware.WHEEL_CIRCUMFERENCE;
     }
 
     public static int angleToPosition(double angle) {

@@ -55,7 +55,7 @@ public abstract class RobotAutonomous extends AutonomousOpMode {
 
         setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         idle();
-        setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         if (isStartDelayed()) {
             add(actions.sleep(getStartDelay()));
@@ -110,10 +110,14 @@ public abstract class RobotAutonomous extends AutonomousOpMode {
     /* */
 
     public boolean areMotorsAtRest() {
-        return !leftMotor.isBusy() && !rightMotor.isBusy();
+        if(leftMotor.getPower() > 0) {
+            return leftMotor.getCurrentPosition() >= leftMotor.getTargetPosition();
+        } else {
+            return leftMotor.getCurrentPosition() <= leftMotor.getTargetPosition();
+        }
     }
 
     public boolean isOnLine() {
-        return colorSensor.alpha() > 10;
+        return colorSensor.alpha() < 10;
     }
 }

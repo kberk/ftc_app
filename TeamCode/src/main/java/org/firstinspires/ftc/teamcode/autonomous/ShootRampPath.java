@@ -20,22 +20,6 @@ public class ShootRampPath extends RobotAutonomous {
     public void initOpMode() {
         super.initOpMode();
 
-        double angle = 20;
-
-        if(isOnLeft()) {
-            add(actions.move(RobotHardware.cmToPosition(31.5 - RobotHardware.AXIS_BACK_DISTANCE), RobotHardware.NORMAL_POWER, RobotHardware.ACCELERATION_TIME));
-            add(actions.turn(getRotationDirection() * RobotHardware.angleToPosition(90), RobotHardware.NORMAL_POWER, 0.5 * RobotHardware.ACCELERATION_TIME));
-            add(actions.move(RobotHardware.cmToPosition(-108 + getTileOffset() * RobotHardware.TILE_WIDTH_CM), RobotHardware.NORMAL_POWER, RobotHardware.ACCELERATION_TIME));
-
-            add(actions.turn(getRotationDirection() * RobotHardware.angleToPosition(angle), RobotHardware.SLOW_POWER, 0.5 * RobotHardware.ACCELERATION_TIME));
-        }
-
-        add(actions.shoot());
-
-        add(actions.turn(-getRotationDirection() * RobotHardware.angleToPosition(15), RobotHardware.FAST_POWER, 0.5 * RobotHardware.ACCELERATION_TIME));
-        add(actions.move(RobotHardware.cmToPosition(90), RobotHardware.FAST_POWER, RobotHardware.ACCELERATION_TIME));
-        add(actions.turn(-getRotationDirection() * RobotHardware.angleToPosition(90), RobotHardware.FAST_POWER, 0.5 * RobotHardware.ACCELERATION_TIME));
-        add(actions.move(RobotHardware.cmToPosition(50), RobotHardware.FAST_POWER, RobotHardware.ACCELERATION_TIME));
 
         add(actions.turn(getRotationDirection() * RobotHardware.angleToPosition(90), RobotHardware.FAST_POWER, 0.5 * RobotHardware.ACCELERATION_TIME));
         add(actions.move(RobotHardware.cmToPosition(100), RobotHardware.FAST_POWER, RobotHardware.ACCELERATION_TIME));
